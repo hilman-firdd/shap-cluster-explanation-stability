@@ -86,9 +86,9 @@
    "F1_cluster_seed": 0.1895424836601307,
    "F2_surrogate": 0.4421011130312277,
    "F3_surrogate_seed": 0.8692810457516341,
-   "F4_estimator": 0.9673202614379086,
+   "F4_estimator": 0.9477124183006538,
    "F5_background": 0.908496732026144,
-   "REF_surrogate_free": 0.8300653594771243
+   "REF_surrogate_free": 0.8562091503267976
   },
   "j3_by_factor": {
    "F1_cluster_seed": 0.2,
@@ -338,7 +338,7 @@
    "F3_surrogate_seed": 0.9607843137254904,
    "F4_estimator": 0.9281045751633987,
    "F5_background": 0.8954248366013072,
-   "REF_surrogate_free": 0.8655784229010972
+   "REF_surrogate_free": 0.8557361541107673
   },
   "j3_by_factor": {
    "F1_cluster_seed": 1.0,

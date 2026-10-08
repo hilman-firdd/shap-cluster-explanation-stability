@@ -21,7 +21,7 @@ disjoint sets of n runs, n = 1..15 (justifies how many runs to aggregate, RQ4 / 
 
 Usage
   python shap_cluster_multiplicity.py --data wine --k 3 --reps 10
-  python shap_cluster_multiplicity.py --data data/d1a.csv --id-col province --k 2 --log1p --reps 30
+  python shap_cluster_multiplicity.py --data path/to/d1a.csv --id-col province --k 4 --log1p --reps 30
 Output
   pairs_<name>.csv   (one row per pair x cluster)
   summary_<name>.csv (median + bootstrap 95% CI per factor and metric)
@@ -125,6 +125,7 @@ def run(X, k, ref_labels, cfg, kernel_nsamples=200):
             e = np.exp(-(d - d.min(1, keepdims=True)))
             return e / e.sum(1, keepdims=True)
 
+        np.random.seed(cfg.bg_seed)  # KernelSHAP samples coalitions with the global NumPy RNG
         sv = shap.KernelExplainer(soft, bg).shap_values(X, nsamples=kernel_nsamples, silent=True)
     else:
         model = make_surrogate(cfg.surrogate, cfg.surrogate_seed).fit(X, labels)
@@ -139,6 +140,7 @@ def run(X, k, ref_labels, cfg, kernel_nsamples=200):
         elif cfg.estimator == "linear":
             sv = shap.LinearExplainer(model, bg).shap_values(X)
         elif cfg.estimator == "kernel":
+            np.random.seed(cfg.bg_seed)  # KernelSHAP samples coalitions with the global NumPy RNG
             sv = shap.KernelExplainer(model.predict_proba, bg).shap_values(X, nsamples=kernel_nsamples, silent=True)
         else:
             raise ValueError(cfg.estimator)

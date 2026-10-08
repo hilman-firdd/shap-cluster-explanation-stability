@@ -24,7 +24,7 @@ pip install -r requirements.txt
 bash run_all.sh
 ```
 
-The full run takes a few hours on a laptop CPU; the D1b factorial (693 rows × 180 runs) is the slowest step. All seeds are fixed, so the outputs should match `results/` up to floating-point differences between library versions.
+The full run took about 95 minutes on 2 CPU cores; the D1b steps are the slowest. All random seeds are fixed, including the coalition sampling of KernelSHAP. A clean rerun of this repository with the package versions in `requirements.txt` reproduced every file in `results/` exactly (8 October 2026). Other library versions may give small floating-point differences.
 
 ## Experimental design
 
@@ -62,7 +62,8 @@ python -I prepare_d1.py raw data/bps_population_sp2020_province.csv data
 ├── run_all.sh                     # full pipeline
 ├── data/                          # derived datasets + BPS population
 ├── results/                       # outputs used in the paper
-└── manuscript/                    # docx build script (Node.js, `docx` package)
+├── manuscript/                    # docx build script (Node.js, `docx` package)
+└── docs/literature_search.md      # search protocol behind the research gap (Sec. 1)
 ```
 
 ## Citation
