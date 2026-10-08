@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+node_modules/
+# outputs written by run_all.sh to the repository root (paper copies live in results/)
+/*.csv
+/*.png
+/*.tiff
+/results.json
+/log_*.txt
+/out/
+# raw data (download from Mendeley Data, see README)
+raw/
+*.xlsx

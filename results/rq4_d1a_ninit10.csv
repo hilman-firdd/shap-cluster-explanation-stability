@@ -1,0 +1,5 @@
+dataset,cluster,scope,n_runs,imm_path_features,shap_top_k,jaccard_topk_vs_path,path_features_in_shap_top3,shap_top3,single_run_jaccard_median,single_run_jaccard_p05,price_of_explainability,tree_ref_agreement
+d1a_ninit10,0,all factorial runs,180,events_tidal_abrasion,events_tidal_abrasion,1.0,1.0,events_tidal_abrasion; houses_damaged; events_flood,,,1.0722263641345797,0.8787878787878788
+d1a_ninit10,0,runs reproducing the reference partition (ARI >= 0.9),108,events_tidal_abrasion,events_tidal_abrasion,1.0,1.0,events_tidal_abrasion; houses_damaged; events_flood,0.0,0.0,1.0722263641345797,0.8787878787878788
+d1a_ninit10,1,all factorial runs,180,events_tidal_abrasion,events_tidal_abrasion,1.0,1.0,events_tidal_abrasion; events_flood; houses_damaged,,,1.0722263641345797,0.8787878787878788
+d1a_ninit10,1,runs reproducing the reference partition (ARI >= 0.9),108,events_tidal_abrasion,events_tidal_abrasion,1.0,1.0,events_tidal_abrasion; houses_damaged; events_flood,1.0,0.0,1.0722263641345797,0.8787878787878788

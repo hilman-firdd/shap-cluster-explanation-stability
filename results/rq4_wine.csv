@@ -1,0 +1,7 @@
+dataset,cluster,scope,n_runs,imm_path_features,shap_top_k,jaccard_topk_vs_path,path_features_in_shap_top3,shap_top3,single_run_jaccard_median,single_run_jaccard_p05,price_of_explainability,tree_ref_agreement
+wine,0,all factorial runs,180,od280/od315_of_diluted_wines; proline,color_intensity; alcohol,0.0,0.5,color_intensity; alcohol; proline,,,1.0570618628701387,0.9325842696629213
+wine,0,runs reproducing the reference partition (ARI >= 0.9),180,od280/od315_of_diluted_wines; proline,color_intensity; alcohol,0.0,0.5,color_intensity; alcohol; proline,0.3333333333333333,0.0,1.0570618628701387,0.9325842696629213
+wine,1,all factorial runs,180,od280/od315_of_diluted_wines,od280/od315_of_diluted_wines,1.0,1.0,od280/od315_of_diluted_wines; flavanoids; color_intensity,,,1.0570618628701387,0.9325842696629213
+wine,1,runs reproducing the reference partition (ARI >= 0.9),180,od280/od315_of_diluted_wines,od280/od315_of_diluted_wines,1.0,1.0,od280/od315_of_diluted_wines; flavanoids; color_intensity,1.0,0.0,1.0570618628701387,0.9325842696629213
+wine,2,all factorial runs,180,od280/od315_of_diluted_wines; proline,proline; flavanoids,0.3333333333333333,0.5,proline; flavanoids; magnesium,,,1.0570618628701387,0.9325842696629213
+wine,2,runs reproducing the reference partition (ARI >= 0.9),180,od280/od315_of_diluted_wines; proline,proline; flavanoids,0.3333333333333333,0.5,proline; flavanoids; magnesium,0.3333333333333333,0.3333333333333333,1.0570618628701387,0.9325842696629213
