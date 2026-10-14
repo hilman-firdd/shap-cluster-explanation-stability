@@ -1,5 +1,5 @@
 """Collect every number reported in the manuscript from the experiment logs into results.json.
-Usage: python compute_results.py   (run from the repository root after all experiments)
+Usage: python compute_results.py
 """
 import json
 import numpy as np
@@ -50,6 +50,12 @@ for name, (src, idc, lg, k) in DS.items():
         "effects": eff[["metric", "term", "coef", "ci_low", "ci_high", "p_value"]].to_dict(orient="records"),
         "curve": {int(n): [float(r.median_tau), float(r.p05_tau)] for n, r in curve.iterrows()},
         "factorial_runs_matching_ref": int((ari_runs >= 0.9).sum()), "factorial_ari_median": float(ari_runs.median()),
+        "factor_table": {f: {"n": int(len(g)), "cosine": float(g.cosine.median()), "kendall_tau": float(g.kendall_tau.median()),
+                             "jaccard_top3": float(g.jaccard_top3.median()), "rbo": float(g.rbo.median()),
+                             "top3_changed": float((g.jaccard_top3 < 1).mean())} for f, g in p.groupby("factor")},
+        "bg_by_size": {k: {"n": int(len(g)), "kendall_tau": float(g.kendall_tau.median()), "top3_changed": float((g.jaccard_top3 < 1).mean())}
+                       for k, g in p[p.factor == "F5_background"].assign(
+                           kind=lambda d: d.cfg_a.str.extract(r"bg_size=(\d+)")[0] + "-" + d.cfg_b.str.extract(r"bg_size=(\d+)")[0]).groupby("kind")},
     }
 
 # robustness: D1a with 10 k-means restarts per seed
