@@ -28,4 +28,6 @@ python compute_results.py
 python make_figures_all.py d1a d1b wine
 
 # 5. (optional) rebuild the manuscript .docx (needs Node.js and `npm install docx`)
-# node manuscript/build_manuscript.js out && python manuscript/post.py out/ADCAIJ_manuscript_cluster_explanation_stability.docx
+# node manuscript/build_manuscript.js out   # also writes blocks.json (semantic content)
+# python manuscript/fill_template.py ADCAIJ_Template_2026_V6.dotx blocks.json out/ADCAIJ_manuscript_cluster_explanation_stability.docx manuscript.docx
+#   (the official template is available at https://adcaij.usal.es/authors/template)

@@ -38,14 +38,15 @@ function runs(s, base = {}) {
   }
   push(s.slice(last)); return out;
 }
-const body = []; let first = true;
-const H1 = t => { body.push(new Paragraph({ spacing: { before: 360, after: 160 }, keepNext: true, children: [new TextRun({ text: t, font: SERIF, size: 32 })] })); first = true; };
-const H2 = t => { body.push(new Paragraph({ spacing: { before: 240, after: 120 }, keepNext: true, children: [new TextRun({ text: t, font: SERIF, size: 27 })] })); first = true; };
-const P = s => { body.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { after: 60 }, indent: first ? undefined : { firstLine: 425 }, children: runs(s) })); first = false; };
-const OL = items => { items.forEach(s => body.push(new Paragraph({ numbering: { reference: 'rq', level: 0 }, alignment: AlignmentType.JUSTIFIED, spacing: { after: 60 }, children: runs(s) }))); first = false; };
+const body = []; let first = true; const BLOCKS = [];  // semantic record used to fill the official ADCAIJ template
+const H1 = t => { BLOCKS.push({ t: 'h1', text: t }); body.push(new Paragraph({ spacing: { before: 360, after: 160 }, keepNext: true, children: [new TextRun({ text: t, font: SERIF, size: 32 })] })); first = true; };
+const H2 = t => { BLOCKS.push({ t: 'h2', text: t }); body.push(new Paragraph({ spacing: { before: 240, after: 120 }, keepNext: true, children: [new TextRun({ text: t, font: SERIF, size: 27 })] })); first = true; };
+const P = s => { BLOCKS.push({ t: 'p', s }); body.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { after: 60 }, indent: first ? undefined : { firstLine: 425 }, children: runs(s) })); first = false; };
+const OL = items => { BLOCKS.push({ t: 'ol', items }); items.forEach(s => body.push(new Paragraph({ numbering: { reference: 'rq', level: 0 }, alignment: AlignmentType.JUSTIFIED, spacing: { after: 60 }, children: runs(s) }))); first = false; };
 const NOTE = s => body.push(new Paragraph({ spacing: { after: 160 }, children: runs(s, { size: 18 }) }));
 const hline = { style: BorderStyle.SINGLE, size: 6, color: '000000' }, none = { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' };
 function TABLE(n, caption, widths, header, rows, note = 'Source: Own elaboration.') {
+  BLOCKS.push({ t: 'table', n, caption, widths, header: header.map(String), rows: rows.map(r => r.map(String)), note });
   const sc = W / widths.reduce((a, b) => a + b, 0); widths = widths.map(w => Math.round(w * sc)); widths[widths.length - 1] += W - widths.reduce((a, b) => a + b, 0);
   body.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 200, after: 100 }, keepNext: true, children: [new TextRun({ text: `Table ${n}. ${caption}`, italics: true, font: SERIF, size: SZ })] }));
   const mk = (cells, head, lastRow) => new TableRow({ tableHeader: head, cantSplit: true, children: cells.map((c, i) => new TableCell({
@@ -56,12 +57,14 @@ function TABLE(n, caption, widths, header, rows, note = 'Source: Own elaboration
   NOTE(note); first = true;
 }
 function FIGURE(n, file, width, _unused, caption) {
+  BLOCKS.push({ t: 'figure', n, file, width, caption });
   const img = fs.readFileSync(file); const pw = img.readUInt32BE(16), ph = img.readUInt32BE(20); const height = Math.round(width * ph / pw);
   body.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 200, after: 60 }, keepNext: true, children: [new ImageRun({ type: 'png', data: img, transformation: { width, height } })] }));
   body.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 60 }, children: [new TextRun({ text: `Figure ${n}. ${caption}`, italics: true, font: SERIF, size: SZ })] }));
   NOTE('Source: Own elaboration.'); first = true;
 }
 function EQ_RBO() {
+  BLOCKS.push({ t: 'eq' });
   const r = t => new MathRun(t);
   const eq = new OMath({ children: [r('RBO(S,T,p)='),
     new MathFraction({ numerator: [r('1−p')], denominator: [r('1−'), new MathSuperScript({ children: [r('p')], superScript: [r('D')] })] }),
@@ -282,7 +285,8 @@ const REFS = [
   'Yuan, H., Liu, M., Kang, L., Miao, C., & Wu, Y. (2022). *An empirical study of the effect of background data size on the stability of SHapley Additive exPlanations (SHAP) for deep learning models* [Preprint]. arXiv. https://doi.org/10.48550/arXiv.2204.11351',
   'Zawadzki, R. S., & Parvaneh, S. (2024). Interpretable clustering for patient phenotyping using advanced machine learning models. In *Computing in Cardiology*. https://doi.org/10.22489/CinC.2024.016',
 ];
-H1('References');
+H1('References'); BLOCKS.push({ t: 'refs', refs: REFS });
+fs.writeFileSync(`${OUT}/../blocks${BLIND ? '_blind' : ''}.json`, JSON.stringify({ title: TITLE, keywords: KEYWORDS, abstract: ABSTRACT, blind: BLIND, blocks: BLOCKS }, null, 1));
 REFS.forEach(r => body.push(new Paragraph({ spacing: { after: 60 }, indent: { left: 425, hanging: 425 }, children: runs(r) })));
 
 // ---------- front matter ----------
